@@ -4,28 +4,78 @@ from sklearn.datasets import make_blobs
 
 class LogisticNeuron:
     def __init__(self, input_dim, learning_rate=0.1, epochs=1000):
+        """
+        Initialize the neuron with random weights and a bias term.
+        """
         ### START CODE HERE ###
-        ### TODO
+        
+        # Inicializar pesos aleatórios pequenos e bias como zero
+        self.weights = np.random.randn(input_dim)
+        self.bias = 0.0
+        self.learning_rate = learning_rate
+        self.epochs = epochs
+        self.loss_history = []  # Lista para armazenar a perda durante o treinamento
+        
         ### END CODE HERE ###
     
     def sigmoid(self, z):
+        """
+        Compute the sigmoid activation function.
+        """
         ### START CODE HERE ###
-        ### TODO
+        
+        return 1 / (1 + np.exp(-z))
+        
         ### END CODE HERE ###
     
     def predict_proba(self, X):
+        """
+        Compute the probability of class 1 using the logistic function.
+        """
         ### START CODE HERE ###
-        ### TODO
+        
+        z = np.dot(X, self.weights) + self.bias
+        return self.sigmoid(z)
+        
         ### END CODE HERE ###
     
     def predict(self, X):
+        """
+        Return binary predictions (0 or 1) based on probability.
+        """
         ### START CODE HERE ###
-        ### TODO
+        
+        return (self.predict_proba(X) >= 0.5).astype(int)
+        
         ### END CODE HERE ###
     
     def train(self, X, y):
+        """
+        Train the model using gradient descent.
+        """
         ### START CODE HERE ###
-        ### TODO
+        
+        m = X.shape[0]  # Número de exemplos
+        
+        for epoch in range(self.epochs):
+            # Calcular predições
+            y_pred = self.predict_proba(X)
+
+            # Calcular erro
+            error = y_pred - y
+
+            # Calcular gradientes
+            dW = np.dot(X.T, error) / m  # Gradiente dos pesos
+            dB = np.sum(error) / m  # Gradiente do bias
+
+            # Atualizar pesos e bias
+            self.weights -= self.learning_rate * dW
+            self.bias -= self.learning_rate * dB
+
+            # Calcular e armazenar perda (log loss)
+            loss = -np.mean(y * np.log(y_pred + 1e-8) + (1 - y) * np.log(1 - y_pred + 1e-8))
+            self.loss_history.append(loss)
+
         ### END CODE HERE ###
 
 def generate_dataset():
