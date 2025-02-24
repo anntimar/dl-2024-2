@@ -39,9 +39,22 @@ def solve_linear_regression(X_train, y_train):
     Students must complete this function using only linear algebra.
     """
     ### START CODE HERE ###
-    ### TODO
-    ### END CODE HERE ###
     
+    # Converter X_train para um vetor coluna
+    X_train = X_train.reshape(-1, 1)
+
+    # Criar a matriz de design adicionando uma coluna de 1s para o termo de viés (intercepto)
+    X_b = np.c_[X_train, np.ones(X_train.shape[0])]
+
+    # Calcular os coeficientes da regressão linear usando a fórmula fechada:
+    # θ = (X^T * X)^(-1) * X^T * y
+    theta_hat = np.linalg.inv(X_b.T @ X_b) @ X_b.T @ y_train
+
+    # Separar os coeficientes encontrados: inclinação (m) e intercepto (b)
+    m_hat, b_hat = theta_hat[0], theta_hat[1]
+
+    ### END CODE HERE ###
+
     return m_hat, b_hat  # Return slope and intercept
 
 # Example use case (to be replaced by your script when evaluating the students' code)
